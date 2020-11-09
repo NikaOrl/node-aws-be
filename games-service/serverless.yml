@@ -1,0 +1,34 @@
+service: games-service
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: "webpack.config.js"
+    includeModules: true
+
+functions:
+  getAllGames:
+    handler: handler.getAllGames
+    events:
+      - http:
+          path: games
+          method: get
+
+  getGameById:
+    handler: handler.getGameById
+    events:
+      - http:
+          path: games/{gameId}
+          method: get
+          request:
+            parameters:
+              paths:
+                gameId: true
