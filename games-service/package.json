@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "deploy": "sls deploy",
-    "start-local-getGame": "sls invoke local --function getProductsList"
+    "start:local": "sls invoke local --function getProductsList"
   },
   "dependencies": {
     "source-map-support": "^0.5.10"

@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { getProductsById } from "./getProductsById";
-import * as gamesList from "./gamesList.json";
+import * as productsList from "./productsList.json";
 
 const mockEventBase: APIGatewayProxyEvent = {
   path: "",
@@ -20,22 +20,22 @@ const mockEventBase: APIGatewayProxyEvent = {
 const mockEventWithExistingId: APIGatewayProxyEvent = {
   ...mockEventBase,
   pathParameters: {
-    gameId: "7567ec4b-b10c-48c5-9345-fc73c48a80aa"
+    productId: "7567ec4b-b10c-48c5-9345-fc73c48a80aa"
   }
 };
 
 const mockEventWithIncorrectId: APIGatewayProxyEvent = {
   ...mockEventBase,
   pathParameters: {
-    gameId: "123"
+    productId: "123"
   }
 };
 
-const errorMessage = "No game with provided id has been found";
+const errorMessage = "No product with provided id has been found";
 
 describe("getProductsById", () => {
-  test("returns status code 200 and right game when correct id is provided", async () => {
-    const expectedProduct = JSON.stringify(gamesList[0]);
+  test("returns status code 200 and right product when correct id is provided", async () => {
+    const expectedProduct = JSON.stringify(productsList[0]);
     const result = (await getProductsById(
       mockEventWithExistingId,
       null,

@@ -1,24 +1,24 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
 import "source-map-support/register";
 
-import * as gamesList from "./gamesList.json";
+import * as productsList from "./productsList.json";
 
 export const getProductsById: APIGatewayProxyHandler = async event => {
-  console.log("getProductById was called with event: ", event);
+  console.log("getProductsById was called with event: ", event);
 
   try {
-    const gameId = event.pathParameters.gameId;
-    const game = gamesList.find(game => game.id === gameId);
+    const productId = event.pathParameters.productId;
+    const product = productsList.find(product => product.id === productId);
 
-    if (!game) {
+    if (!product) {
       return {
         statusCode: 404,
-        body: "No game with provided id has been found"
+        body: "No product with provided id has been found"
       };
     }
     return {
       statusCode: 200,
-      body: JSON.stringify(game)
+      body: JSON.stringify(product)
     };
   } catch (error) {
     const errorString = JSON.stringify(error);

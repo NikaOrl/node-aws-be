@@ -35,7 +35,7 @@ const serverlessConfiguration: Serverless = {
       events: [
         {
           http: {
-            path: "games",
+            path: "products",
             method: "get",
             cors: true
           }
@@ -43,12 +43,12 @@ const serverlessConfiguration: Serverless = {
       ]
     },
 
-    getProductById: {
-      handler: "handler.getProductById",
+    getProductsById: {
+      handler: "handler.getProductsById",
       events: [
         {
           http: {
-            path: "games/{gameId}",
+            path: "products/{productId}",
             method: "get",
             cors: true,
             request: {

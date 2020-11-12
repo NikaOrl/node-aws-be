@@ -1,7 +1,7 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
 import "source-map-support/register";
 
-import * as gamesList from "./gamesList.json";
+import * as productsList from "./productsList.json";
 
 export const getProductsList: APIGatewayProxyHandler = async event => {
   console.log("getProductsList was called with event: ", event);
@@ -9,7 +9,7 @@ export const getProductsList: APIGatewayProxyHandler = async event => {
   try {
     return {
       statusCode: 200,
-      body: JSON.stringify(gamesList)
+      body: JSON.stringify(productsList)
     };
   } catch (error) {
     const errorData = JSON.stringify(error);
