@@ -25,7 +25,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/InventoryItem"
+                  $ref: "#/components/schemas/ProductItem"
         "400":
           description: bad input parameter
   /products/{productId}:
@@ -46,12 +46,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InventoryItem"
+                $ref: "#/components/schemas/ProductItem"
         "400":
           description: bad input parameter
 components:
   schemas:
-    InventoryItem:
+    ProductItem:
       type: object
       required:
         - id
