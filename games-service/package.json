@@ -9,6 +9,7 @@
     "start:local": "sls invoke local --function getProductsList"
   },
   "dependencies": {
+    "csv-parser": "^2.3.3",
     "pg": "^8.4.2",
     "source-map-support": "^0.5.10"
   },
