@@ -28,6 +28,21 @@ paths:
                   $ref: "#/components/schemas/ProductItem"
         "400":
           description: bad input parameter
+        "500":
+          description: Server error
+    post:
+      tags:
+        - products
+      summary: Post product
+      requestBody:
+        $ref: "#/components/requestBodies/ProductBody"
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Field 'title' is empty
+        "500":
+          description: Server error
   /products/{productId}:
     get:
       tags:
@@ -49,24 +64,37 @@ paths:
                 $ref: "#/components/schemas/ProductItem"
         "400":
           description: bad input parameter
+        "500":
+          description: Server error
 components:
+  requestBodies:
+    ProductBody:
+      description: A JSON object containing pet information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProductItem"
   schemas:
     ProductItem:
       type: object
       required:
         - id
-        - name
-        - manufacturer
-        - releaseDate
+        - title
       properties:
         id:
           type: string
           format: uuid
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
-        name:
+        title:
           type: string
-          example: Widget Adapter
-        releaseDate:
+          example: Assassins Creed Valhalla
+        description:
           type: string
-          format: date-time
-          example: "2016-08-29T09:12:33.001Z"
+          example: In Assassins Creed Valhalla, become Eivor...
+        price:
+          type: string
+          example: 12
+        image:
+          type: string
+          example: https://store-images.s-microsoft.com/image/apps.33999.14585440003614248.9f7109bf-73f7-4bc7-ba61-1eeb006d905a.cc10ed66-57c3-44ac-bf97-61a892172f19
