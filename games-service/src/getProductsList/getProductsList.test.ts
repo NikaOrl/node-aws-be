@@ -1,6 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+
 import { getProductsList } from "./getProductsList";
-import * as productsList from "../productsList.json";
+import productsList from "../productsList.json";
+import { HTTP_CODES } from "../constants";
 
 const mockEvent: APIGatewayProxyEvent = {
   path: "",
@@ -26,6 +28,6 @@ describe("getProductsList", () => {
     )) as APIGatewayProxyResult;
 
     expect(result.body).toEqual(JSON.stringify(productsList));
-    expect(result.statusCode).toEqual(200);
+    expect(result.statusCode).toEqual(HTTP_CODES.OK);
   });
 });
