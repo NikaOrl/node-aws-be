@@ -1,0 +1,72 @@
+openapi: 3.0.0
+
+servers:
+  - description: Games service
+    url: https://sfuj8ilp8h.execute-api.us-east-1.amazonaws.com/dev
+
+info:
+  description: API documentation for Games Service
+  version: "1.0.0"
+  title: Games service
+  contact:
+    email: veronika_orlova@epam.com
+
+paths:
+  /products:
+    get:
+      tags:
+        - products
+      summary: Get all products
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductItem"
+        "400":
+          description: bad input parameter
+  /products/{productId}:
+    get:
+      tags:
+        - products
+      summary: Get all products
+      parameters:
+        - in: path
+          name: productId
+          description: Game id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductItem"
+        "400":
+          description: bad input parameter
+components:
+  schemas:
+    ProductItem:
+      type: object
+      required:
+        - id
+        - name
+        - manufacturer
+        - releaseDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: Widget Adapter
+        releaseDate:
+          type: string
+          format: date-time
+          example: "2016-08-29T09:12:33.001Z"
