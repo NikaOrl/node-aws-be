@@ -24,11 +24,6 @@ const mockEventWithQueryStringParameters: APIGatewayProxyEvent = {
   queryStringParameters: { name: "products.cvs" }
 };
 
-// const mockEventWithoutQueryStringParameters: APIGatewayProxyEvent = {
-//   ...mockEventBase,
-//   queryStringParameters: {}
-// };
-
 describe("importProductsFile", () => {
   it("should return status code 200 and create signed URL and return it back", async () => {
     const testURL = "testUrl";
