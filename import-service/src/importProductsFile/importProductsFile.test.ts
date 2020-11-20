@@ -1,8 +1,8 @@
 import * as AWSMock from "aws-sdk-mock";
+import { APIGatewayProxyEvent } from "aws-lambda";
 
 import { importProductsFile } from "./importProductsFile";
 import { CORS_HEADERS, HTTP_CODES, BUCKET } from "../constants";
-import { APIGatewayProxyEvent } from "aws-lambda";
 
 const mockEventWithoutQueryStringParameters: APIGatewayProxyEvent = {
   path: "",
