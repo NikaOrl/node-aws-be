@@ -11,6 +11,16 @@ export const importProductsFile: APIGatewayProxyHandler = async event => {
 
     const fileName = event.queryStringParameters.name;
 
+    if (!fileName) {
+      return {
+        statusCode: HTTP_CODES.CLIENT_ERROR,
+        headers: { ...CORS_HEADERS },
+        body: JSON.stringify({
+          message: "File was not provided right - file name wasn't found"
+        })
+      };
+    }
+
     const signedUrlParams = {
       Bucket: BUCKET,
       Key: `uploaded/${fileName}`,
