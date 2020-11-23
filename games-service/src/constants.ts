@@ -1,5 +1,3 @@
-import * as Joi from "joi";
-
 export const REGION = "us-east-1";
 
 export const CORS_HEADERS = {

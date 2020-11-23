@@ -35,7 +35,7 @@ const mockEventWithIncorrectId: APIGatewayProxyEvent = {
 
 const errorMessage = "No product with provided id has been found";
 
-describe("getProductsById", () => {
+xdescribe("getProductsById", () => {
   test("returns status code 200 and right product when correct id is provided", async () => {
     const expectedProduct = JSON.stringify(productsList[0]);
     const result = (await getProductsById(

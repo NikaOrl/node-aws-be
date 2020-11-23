@@ -5,6 +5,8 @@ import { DB_OPTIONS } from "../db/dbConfig";
 import { REGION } from "../constants";
 
 export const catalogBatchProcess = async event => {
+  console.log("catalogBatchProcess was called with event: ", event);
+
   const sns = new SNS({ region: REGION });
   const client = new Client(DB_OPTIONS);
   await client.connect();
@@ -12,12 +14,11 @@ export const catalogBatchProcess = async event => {
   try {
     const products = event.Records.map(({ body }) => {
       const product = JSON.parse(body);
-      let error = null;
 
       if (!product.title) {
-        error = `Field 'title' is empty`;
+        product.error = `Field 'title' is empty`;
       }
-      return { ...product, error };
+      return { ...product };
     }).filter(p => {
       if (p.error) {
         console.error(`Product is not valid: ${JSON.parse(p)}`);
@@ -33,18 +34,18 @@ export const catalogBatchProcess = async event => {
     await client.query("BEGIN");
 
     const { rows } = await client.query(`
-            insert into products (title, description, price, image) values
+            INSERT INTO product(description, title, price, image) VALUES
             ${products
               .map(
                 product =>
                   `('${product.title}', '${product.description}', ${product.price}, '${product.image}')`
               )
               .join(",")}
-            returning id;
+              RETURNING id
         `);
 
     await client.query(`
-            insert into stocks (product_id, count) values
+            INSERT INTO stock (product_id, count) VALUES
             ${rows
               .map((r, index) => `('${r.id}', ${products[index].count})`)
               .join(", ")};
@@ -68,15 +69,16 @@ export const catalogBatchProcess = async event => {
           .promise()
           .then(() => console.log("Email was send", JSON.stringify(product)))
           .catch(e => {
+            console.log(e);
             throw new Error(e);
           })
       )
     );
+  } catch (error) {
+    const errorData = JSON.stringify(error);
 
-    console.log("Request ended");
-  } catch (e) {
     await client.query("ROLLBACK");
-    console.log(e);
+    console.log("An error occured while processing event: ", errorData);
   } finally {
     client.end();
   }

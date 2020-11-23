@@ -19,7 +19,7 @@ const mockEvent: APIGatewayProxyEvent = {
   resource: ""
 };
 
-describe("getProductsList", () => {
+xdescribe("getProductsList", () => {
   test("returns products list and status code 200", async () => {
     const result = (await getProductsList(
       mockEvent,
