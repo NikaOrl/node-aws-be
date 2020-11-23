@@ -1,3 +1,7 @@
+import * as Joi from "joi";
+
+export const REGION = "us-east-1";
+
 export const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Credentials": true,

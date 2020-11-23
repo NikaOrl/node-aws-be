@@ -21,7 +21,10 @@ const serverlessConfiguration: Serverless = {
       minimumCompressionSize: 1024
     },
     environment: {
-      AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
+      SQS_QUEUE: {
+        Ref: "SQSQueue"
+      }
     },
     iamRoleStatements: [
       {
@@ -35,10 +38,55 @@ const serverlessConfiguration: Serverless = {
         Action: "s3:*",
         Resource:
           "arn:aws:s3:::import-service-dev-serverlessdeploymentbucket-12wj3mh48ul3c/*"
+      },
+      {
+        Effect: "Allow",
+        Action: "sqs:*",
+        Resource: [
+          {
+            "Fn::GetAtt": ["SQSQueue", "Arn"]
+          }
+        ]
       }
     ]
   },
 
+  resources: {
+    Resources: {
+      SQSQueue: {
+        Type: "AWS::SQS::Queue",
+        Properties: {
+          QueueName: "catalogItemsQueue"
+        }
+      }
+    },
+    Outputs: {
+      SQSQueue: {
+        Value: {
+          Ref: "SQSQueue"
+        },
+        Export: {
+          Name: "SQSQueue"
+        }
+      },
+      SQSQueueUrl: {
+        Value: {
+          Ref: "SQSQueue"
+        },
+        Export: {
+          Name: "SQSQueueUrl"
+        }
+      },
+      SQSQueueArn: {
+        Value: {
+          "Fn::GetAtt": ["SQSQueue", "Arn"]
+        },
+        Export: {
+          Name: "SQSQueueArn"
+        }
+      }
+    }
+  },
   functions: {
     importProductsFile: {
       handler: "handler.importProductsFile",
