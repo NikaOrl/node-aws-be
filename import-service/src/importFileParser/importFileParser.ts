@@ -1,5 +1,5 @@
 import { S3Handler } from "aws-lambda";
-import { S3 } from "aws-sdk";
+import { S3, SQS } from "aws-sdk";
 import { GetObjectRequest } from "aws-sdk/clients/s3";
 import * as csvParser from "csv-parser";
 
@@ -10,6 +10,7 @@ export const importFileParser: S3Handler = event => {
 
   try {
     const s3 = new S3({ region: REGION });
+    const sqs = new SQS();
 
     event.Records.forEach(record => {
       const source = record.s3.object.key;
@@ -23,8 +24,17 @@ export const importFileParser: S3Handler = event => {
 
       fileStream
         .pipe(csvParser())
-        .on("data", data => {
-          console.log(`importFileParser has processed ${source}: ${data}`);
+        .on("data", product => {
+          console.log(product);
+          sqs.sendMessage(
+            {
+              QueueUrl: process.env.SQS_QUEUE,
+              MessageBody: JSON.stringify(product)
+            },
+            err => {
+              console.log(err || "Message was pushed to SQS");
+            }
+          );
         })
         .on("error", error => {
           throw new Error(error.message);
