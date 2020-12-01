@@ -1,5 +1,7 @@
 import { Serverless } from "serverless/aws";
 
+import { ResponseParameters } from "./src/constants";
+
 const serverlessConfiguration: Serverless = {
   service: {
     name: "import-service"
@@ -62,10 +64,7 @@ const serverlessConfiguration: Serverless = {
       GatewayResponseAccessDenied: {
         Type: "AWS::ApiGateway::GatewayResponse",
         Properties: {
-          ResponseParameters: {
-            "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
-            "gatewayresponse.header.Access-Control-Allow-Headers": "'*'"
-          },
+          ResponseParameters: ResponseParameters,
           ResponseType: "ACCESS_DENIED",
           RestApiId: {
             Ref: "ApiGatewayRestApi"
@@ -75,10 +74,7 @@ const serverlessConfiguration: Serverless = {
       GatewayResponseUnauthorized: {
         Type: "AWS::ApiGateway::GatewayResponse",
         Properties: {
-          ResponseParameters: {
-            "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
-            "gatewayresponse.header.Access-Control-Allow-Headers": "'*'"
-          },
+          ResponseParameters: ResponseParameters,
           ResponseType: "UNAUTHORIZED",
           RestApiId: {
             Ref: "ApiGatewayRestApi"

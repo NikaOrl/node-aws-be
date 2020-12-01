@@ -30,13 +30,15 @@ export const basicAuthorizer = async (
     const encodedCreds = authorizationToken.split(" ")[1];
     const buff = Buffer.from(encodedCreds, "base64");
     const plainCreds = buff.toString("utf-8").split(":");
-    const userName = plainCreds[0];
-    const password = plainCreds[1];
+    const [userName, password] = plainCreds;
 
     console.log("userName: ", userName);
     console.log("password: ", password);
 
-    const effect = process.env[userName] === password ? "Allow" : "Deny";
+    const effect =
+      process.env[userName] && process.env[userName] === password
+        ? "Allow"
+        : "Deny";
 
     const policy = generatePolicy(effect, event.methodArn, effect);
 

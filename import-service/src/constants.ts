@@ -18,3 +18,8 @@ export const HTTP_CODES = {
 
   SERVER_ERROR: 500
 };
+
+export const ResponseParameters = {
+  "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+  "gatewayresponse.header.Access-Control-Allow-Headers": "'*'"
+};
