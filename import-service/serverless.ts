@@ -1,5 +1,7 @@
 import { Serverless } from "serverless/aws";
 
+import { ResponseParameters } from "./src/constants";
+
 const serverlessConfiguration: Serverless = {
   service: {
     name: "import-service"
@@ -58,6 +60,26 @@ const serverlessConfiguration: Serverless = {
         Properties: {
           QueueName: "catalogItemsQueue"
         }
+      },
+      GatewayResponseAccessDenied: {
+        Type: "AWS::ApiGateway::GatewayResponse",
+        Properties: {
+          ResponseParameters: ResponseParameters,
+          ResponseType: "ACCESS_DENIED",
+          RestApiId: {
+            Ref: "ApiGatewayRestApi"
+          }
+        }
+      },
+      GatewayResponseUnauthorized: {
+        Type: "AWS::ApiGateway::GatewayResponse",
+        Properties: {
+          ResponseParameters: ResponseParameters,
+          ResponseType: "UNAUTHORIZED",
+          RestApiId: {
+            Ref: "ApiGatewayRestApi"
+          }
+        }
       }
     },
     Outputs: {
@@ -93,9 +115,16 @@ const serverlessConfiguration: Serverless = {
       events: [
         {
           http: {
-            method: "get",
+            method: "put",
             path: "import",
             cors: true,
+            authorizer: {
+              name: "basicAuthorizer",
+              arn:
+                "arn:aws:lambda:us-east-1:443507229806:function:authorization-service-dev-basicAuthorizer",
+              type: "token",
+              resultTtlInSeconds: 0
+            },
             request: {
               parameters: {
                 querystrings: {
