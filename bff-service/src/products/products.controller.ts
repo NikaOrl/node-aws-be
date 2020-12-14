@@ -5,7 +5,8 @@ import {
   Req,
   UseInterceptors,
   CacheInterceptor,
-  HttpStatus
+  HttpStatus,
+  Logger
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Request } from "express";
@@ -13,6 +14,8 @@ import { ProxyService } from "../proxy/proxy.service";
 
 @Controller("product")
 export class ProductsController {
+  private readonly logger = new Logger(ProductsController.name);
+
   constructor(
     private productsService: ProxyService,
     private configService: ConfigService
@@ -32,8 +35,13 @@ export class ProductsController {
     const recipient = urlParams[0];
     const recipientUrl = this.configService.get<string>(recipient);
 
+    this.logger.log(
+      `Handling request with url ${recipientUrl} ${recipient} ${urlParams}...`
+    );
+
     if (recipientUrl) {
       const url = `${recipientUrl}/${urlParams.slice(1).join("/")}`;
+      this.logger.log(`Requesting ${url}...`);
       return this.productsService.handleRequest(url, request);
     }
 

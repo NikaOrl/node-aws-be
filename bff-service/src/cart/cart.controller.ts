@@ -1,9 +1,11 @@
-import { All, Controller, Req, HttpStatus } from "@nestjs/common";
+import { All, Controller, Req, HttpStatus, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ProxyService } from "../proxy/proxy.service";
 
 @Controller("cart")
 export class CartController {
+  private readonly logger = new Logger(CartController.name);
+
   constructor(
     private cartService: ProxyService,
     private configService: ConfigService
@@ -15,8 +17,11 @@ export class CartController {
     const recipient = urlParams[0];
     const recipientUrl = this.configService.get<string>(recipient);
 
+    this.logger.log(`Handling request with url ${recipientUrl}...`);
+
     if (recipientUrl) {
       const url = `${recipientUrl}/${urlParams.slice(1).join("/")}`;
+      this.logger.log(`Requesting ${url} ...`);
       return this.cartService.handleRequest(url, request);
     }
 
