@@ -4,8 +4,6 @@ import { AxiosRequestConfig, Method } from "axios";
 import { Request } from "express";
 import { Observable } from "rxjs";
 
-import getAllowedHeaders from "./utils/getAllowedHeaders";
-
 @Injectable()
 export class ProxyService {
   constructor(private httpService: HttpService) {}
@@ -16,9 +14,9 @@ export class ProxyService {
     const config: AxiosRequestConfig = {
       url,
       method: method as Method,
-      headers: getAllowedHeaders(headers),
-      ...(Object.keys(body || {}).length && { data: body }),
-      ...(Object.keys(params || {}).length && { params })
+      headers,
+      data: body,
+      params
     };
 
     return this.httpService.request(config).pipe(
