@@ -1,4 +1,4 @@
-import { Injectable, HttpService, HttpException } from "@nestjs/common";
+import { Injectable, HttpService, HttpException, Logger } from "@nestjs/common";
 import { map, catchError } from "rxjs/operators";
 import { AxiosRequestConfig, Method } from "axios";
 import { Request } from "express";
@@ -16,6 +16,8 @@ const getHeaders = (requestHeaders = {}) =>
 
 @Injectable()
 export class ProxyService {
+  private readonly logger = new Logger(ProxyService.name);
+
   constructor(private httpService: HttpService) {}
 
   handleRequest(url: string, request: Request): Observable<any> {
@@ -25,9 +27,11 @@ export class ProxyService {
       url,
       method: method as Method,
       headers: getHeaders(headers),
-      data: body,
-      params
+      ...(Object.keys(body).length && { data: body }),
+      ...(Object.keys(params).length && { params })
     };
+
+    this.logger.log(config);
 
     return this.httpService.request(config).pipe(
       map((response: any) => response.data),

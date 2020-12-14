@@ -25,7 +25,11 @@ export class ProductsController {
   @UseInterceptors(CacheInterceptor)
   handleProducts(@Req() request: Request): any {
     const recipientUrl = this.configService.get<string>("product");
+
+    this.logger.log(`Handling request with url ${recipientUrl} ...`);
+
     const url = `${recipientUrl}/products`;
+    this.logger.log(`Requesting ${url} ...`);
     return this.productsService.handleRequest(url, request);
   }
 
@@ -35,13 +39,11 @@ export class ProductsController {
     const recipient = urlParams[0];
     const recipientUrl = this.configService.get<string>(recipient);
 
-    this.logger.log(
-      `Handling request with url ${recipientUrl} ${recipient} ${urlParams}...`
-    );
+    this.logger.log(`Handling request with url ${recipientUrl} ...`);
 
     if (recipientUrl) {
       const url = `${recipientUrl}/${urlParams.slice(1).join("/")}`;
-      this.logger.log(`Requesting ${url}...`);
+      this.logger.log(`Requesting ${url} ...`);
       return this.productsService.handleRequest(url, request);
     }
 
