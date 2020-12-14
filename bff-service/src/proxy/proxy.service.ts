@@ -4,6 +4,16 @@ import { AxiosRequestConfig, Method } from "axios";
 import { Request } from "express";
 import { Observable } from "rxjs";
 
+const ALLOWED_HEADERS = ["authorization"];
+
+const getHeaders = (requestHeaders = {}) =>
+  Object.keys(requestHeaders).reduce((headers, key) => {
+    if (ALLOWED_HEADERS.includes(key)) {
+      headers[key] = requestHeaders[key];
+    }
+    return headers;
+  }, {});
+
 @Injectable()
 export class ProxyService {
   constructor(private httpService: HttpService) {}
@@ -14,7 +24,7 @@ export class ProxyService {
     const config: AxiosRequestConfig = {
       url,
       method: method as Method,
-      headers,
+      headers: getHeaders(headers),
       data: body,
       params
     };
